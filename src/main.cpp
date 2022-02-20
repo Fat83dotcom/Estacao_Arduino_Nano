@@ -14,10 +14,10 @@ const int tempoIn = 100;
 const int tempoOut = 470;
 
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
-#define SCREEN_WIDTH 128 // Oled display width(largura), in pixels
-#define SCREEN_HEIGHT 64 // Oled display height(altura), in pixels
-#define Oled_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, Oled_RESET);
+// #define SCREEN_WIDTH 128 // Oled display width(largura), in pixels
+// #define SCREEN_HEIGHT 64 // Oled display height(altura), in pixels
+// #define Oled_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
+// Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, Oled_RESET);
 Adafruit_BME280 bme;
 Temporarios t;
 FiltraNaN filtroNaN;
@@ -41,11 +41,11 @@ void run() {
   static double mediaTemp;
   static double mediaPress;
   static double media10k;
-  static unsigned long ultimaLeitura0 = millis();
-  static unsigned long ultimaLeitura1 = millis();
-  static unsigned long ultimaLeitura2 = millis();
-  static unsigned long ultimaLeitura3 = millis();
-  static unsigned long ultimaLeitura4 = millis();
+  static unsigned long tempoCorrente0 = millis();
+  static unsigned long tempoCorrente1 = millis();
+  static unsigned long tempoCorrente2 = millis();
+  static unsigned long tempoCorrente3 = millis();
+  static unsigned long tempoCorrente4 = millis();
   static double soma10k, somaUmi, somaTemp, somaPress;
   
   static int cont = 0;
@@ -76,90 +76,55 @@ void run() {
     digitalWrite(led, 1);
   }
 
-  if ((millis() - ultimaLeitura0) < 495) {
-
-    display.invertDisplay(true);
-    display.setTextSize(1);
-    display.setTextColor(WHITE);
-    display.setCursor(2, 5);
-    display.println("ESTACAO METEREOLOGICA");
-    display.setCursor(14, 17);
-    display.print("Umidade: ");
-    display.print(mediaUmi);
-    display.println(" %");
-    display.setCursor(14, 27);
-    display.print("Press: ");
-    display.print(mediaPress);
-    display.println(" hPa");
-    display.setCursor(14, 37);
-    display.print("TempInt: ");
-    display.print(mediaTemp);
-    display.println(" C");
-    display.setCursor(14, 47);
-    display.print("TempExt: ");
-    display.print(media10k);
-    display.println(" C");
-    display.setCursor(2, 56);
-    display.print("D: ");
-    display.print(dias);
-    display.print(",H: ");
-    display.print(hora);
-    display.print(",M: ");
-    display.println(minuto);
-    display.setCursor(116, 56);
-    display.print(cont);
-    display.display();
-    display.clearDisplay();
-  }
-  else {
-    ;
-  }
-
-  if ((millis() - ultimaLeitura0) > 500) {
-
-    ultimaLeitura0 = millis();
+  if ((millis() - tempoCorrente0) < 99) {
+    visor(mediaUmi, mediaPress, mediaTemp, media10k, dias, hora, minuto, cont);
   }
   
-  if ((millis() - ultimaLeitura1) < tempoIn) {
+  if ((millis() - tempoCorrente0) > 100) {
+
+    tempoCorrente0 = millis();
+  }
+  
+  if ((millis() - tempoCorrente1) < tempoIn) {
 
     Serial.print("u ");
     Serial.println(mediaUmi, DEC);
   }
-  if ((millis() - ultimaLeitura1) > tempoOut) {
+  if ((millis() - tempoCorrente1) > tempoOut) {
 
-    ultimaLeitura1 = millis();
+    tempoCorrente1 = millis();
   }
 
-  if ((millis() - ultimaLeitura2) < tempoIn) {
+  if ((millis() - tempoCorrente2) < tempoIn) {
    
     Serial.print("1 ");
     Serial.println(mediaTemp, DEC); 
   }
-  if ((millis() - ultimaLeitura2) > tempoOut) {
+  if ((millis() - tempoCorrente2) > tempoOut) {
 
-    ultimaLeitura2 = millis();
+    tempoCorrente2 = millis();
   }
 
-  if ((millis() - ultimaLeitura3) < tempoIn) {
+  if ((millis() - tempoCorrente3) < tempoIn) {
 
     Serial.print("p ");
     Serial.println(mediaPress, DEC);
   }
 
-  if ((millis() - ultimaLeitura3) > tempoOut) {
+  if ((millis() - tempoCorrente3) > tempoOut) {
 
-    ultimaLeitura3 = millis();
+    tempoCorrente3 = millis();
   }
 
-  if ((millis() - ultimaLeitura4) < tempoIn) {
+  if ((millis() - tempoCorrente4) < tempoIn) {
 
     Serial.print("2 ");
     Serial.println(media10k, DEC);
   }
 
-  if ((millis() - ultimaLeitura4) > tempoOut) {
+  if ((millis() - tempoCorrente4) > tempoOut) {
 
-    ultimaLeitura4 = millis();
+    tempoCorrente4 = millis();
   }
 }
 
