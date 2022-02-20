@@ -3,10 +3,22 @@
 
 #include <Arduino.h>
 #include <math.h>
+#include <Adafruit_SSD1306.h>
+#include <SPI.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+
+#define SCREEN_WIDTH 128 // Oled display width(largura), in pixels
+#define SCREEN_HEIGHT 64 // Oled display height(altura), in pixels
+#define Oled_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
+
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, Oled_RESET);
 
 class Temporarios;
 class FiltraNaN;
 double getTemp(int sensor);
+void visor(int mediaUmi, int mediaPress, int mediaTemp,
+           int media10k, int dias, int hora, int minuto, int cont);
 
 class Temporarios {
   private:
@@ -100,6 +112,54 @@ double getTemp(int sensor) {
   Temp = 1 / (0.001129148 + (0.000234125 * Temp) + (0.0000000876741 * Temp * Temp * Temp));
   Temp = Temp - 273.15;  // Convert Kelvin to Celsius
   return Temp;  
+}
+
+void visor(double mediaUmi, double mediaPress, double mediaTemp,
+           double media10k, int dias, int hora, int minuto, int cont) {
+  display.invertDisplay(0);
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+
+  display.setCursor(2, 5);
+  display.println("ESTACAO METEREOLOGICA");
+
+  display.setCursor(1, 17);
+  display.print("U:");
+  display.print(mediaUmi);
+  display.println("%");
+ 
+  display.setCursor(1, 27);
+  display.print("P:");
+  display.print(mediaPress);
+  display.println("hPa");
+  
+  display.setCursor(1, 37);
+  display.print("T.Int:");
+  display.print(mediaTemp);
+  display.println("C");
+  
+  display.setCursor(1, 47);
+  display.print("T.Ext:");
+  display.print(media10k);
+  display.println("C");
+  
+  display.setCursor(1, 57);
+  display.print("D:");
+  display.print(dias);
+  display.print(",H:");
+  display.print(hora);
+  display.print(",M:");
+  display.println(minuto);
+  
+  display.setCursor(78, 17);
+  display.print("Contador");
+  display.setCursor(84, 27);
+  display.print("Media");
+  display.setCursor(92, 37);
+  display.print(cont);
+
+  display.display();
+  display.clearDisplay();
 }
 
 #endif
