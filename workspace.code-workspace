@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"name": "nano",
+			"path": "Estacao_Arduino_Nano/nano"
+		},
+		{
+			"name": "Estacao_Arduino_Nano",
+			"path": "Estacao_Arduino_Nano"
+		}
+	],
+	"settings": {}
+}
