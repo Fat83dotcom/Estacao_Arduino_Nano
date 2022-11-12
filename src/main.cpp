@@ -46,7 +46,7 @@ void run() {
   static int cont = 0;
   static int minuto, hora, dias;
   minuto = hora = dias = 0;
-  int divisor = 100;
+  const int divisor = 100;
   minuto = millis() / 60000;
   hora = minuto / 60;
   dias = hora / 24;
