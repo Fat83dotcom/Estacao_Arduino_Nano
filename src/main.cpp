@@ -10,8 +10,8 @@
 
 const int led = 13;
 const int sensorK10 = 0;
-const int tempoIn = 100;
-const int tempoOut = 470;
+const int tempoIn = 90;
+const int tempoOut = 900;
 
 Adafruit_BME280 bme;
 Temporarios t;
@@ -21,7 +21,7 @@ void setup() {
   
   pinMode(led, OUTPUT);
   pinMode(sensorK10, INPUT);
-  Serial.begin(115200);
+  Serial.begin(9600);
   display.begin(SSD1306_SWITCHCAPVCC, 0x3c);
   bme.begin(0x76);
   display.clearDisplay();
@@ -38,9 +38,6 @@ void run() {
   static double media10k;
   static unsigned long tempoCorrente0 = millis();
   static unsigned long tempoCorrente1 = millis();
-  static unsigned long tempoCorrente2 = millis();
-  static unsigned long tempoCorrente3 = millis();
-  static unsigned long tempoCorrente4 = millis();
   static double soma10k, somaUmi, somaTemp, somaPress;
   
   static int cont = 0;
@@ -84,42 +81,16 @@ void run() {
 
     Serial.print("u ");
     Serial.println(mediaUmi, DEC);
+    Serial.print("p ");
+    Serial.println(mediaPress, DEC);
+    Serial.print("1 ");
+    Serial.println(mediaTemp, DEC);
+    Serial.print("2 ");
+    Serial.println(media10k, DEC);
   }
   if ((millis() - tempoCorrente1) > tempoOut) {
 
     tempoCorrente1 = millis();
-  }
-
-  if ((millis() - tempoCorrente2) < tempoIn) {
-   
-    Serial.print("1 ");
-    Serial.println(mediaTemp, DEC); 
-  }
-  if ((millis() - tempoCorrente2) > tempoOut) {
-
-    tempoCorrente2 = millis();
-  }
-
-  if ((millis() - tempoCorrente3) < tempoIn) {
-
-    Serial.print("p ");
-    Serial.println(mediaPress, DEC);
-  }
-
-  if ((millis() - tempoCorrente3) > tempoOut) {
-
-    tempoCorrente3 = millis();
-  }
-
-  if ((millis() - tempoCorrente4) < tempoIn) {
-
-    Serial.print("2 ");
-    Serial.println(media10k, DEC);
-  }
-
-  if ((millis() - tempoCorrente4) > tempoOut) {
-
-    tempoCorrente4 = millis();
   }
 }
 
