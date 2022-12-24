@@ -11,7 +11,7 @@
 const int led = 13;
 const int sensorK10 = 0;
 const int tempoIn = 90;
-const int tempoOut = 900;
+const int tempoOut = 910;
 
 Adafruit_BME280 bme;
 Temporarios t;
