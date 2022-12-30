@@ -114,6 +114,34 @@ double getTemp(int sensor) {
   return Temp;  
 }
 
+void emissorDados(
+  int bytesRecebidos,
+  double mediaUmi,
+  double mediaPress,
+  double mediaTemp,
+  double media10k){
+  if (Serial.available()){
+    bytesRecebidos = Serial.read();
+  
+    if (bytesRecebidos == 'u'){
+      Serial.print("u ");
+      Serial.println(mediaUmi, 2);
+    }
+    if (bytesRecebidos == 'p'){
+      Serial.print("p ");
+      Serial.println(mediaPress, 2);
+    }
+    if (bytesRecebidos == '1'){
+      Serial.print("1 ");
+      Serial.println(mediaTemp, 2);
+    }
+    if (bytesRecebidos == '2'){
+      Serial.print("2 ");
+      Serial.println(media10k, 2);
+    }
+  }
+}
+
 void visor(double mediaUmi, double mediaPress, double mediaTemp,
            double media10k, int dias, int hora, int minuto, int cont) {
   display.invertDisplay(0);
