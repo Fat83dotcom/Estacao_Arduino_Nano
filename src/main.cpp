@@ -10,8 +10,11 @@
 
 const int led = 13;
 const int sensorK10 = 0;
-const int tempoIn = 90;
-const int tempoOut = 910;
+double mediaUmi;
+double mediaTemp;
+double mediaPress;
+double media10k;
+int bytesRecebidos;
 
 Adafruit_BME280 bme;
 Temporarios t;
@@ -29,27 +32,25 @@ void setup() {
 }
 
 double getTemp(int sensor);
+void emissorDados(
+  int bytesRecebidos,
+  double mediaUmi, 
+  double mediaPess, 
+  double mediaTemp, 
+  double media10k);
 
-void run() {
-
-  static double mediaUmi;
-  static double mediaTemp;
-  static double mediaPress;
-  static double media10k;
+void hardWorker() {
   static unsigned long tempoCorrente0 = millis();
-  static unsigned long tempoCorrente1 = millis();
   static double soma10k, somaUmi, somaTemp, somaPress;
-  
   static int cont = 0;
   static int minuto, hora, dias;
+  const int divisor = 20;
   minuto = hora = dias = 0;
-  const int divisor = 100;
   minuto = millis() / 60000;
   hora = minuto / 60;
   dias = hora / 24;
   
   if (cont < divisor) {
-
     somaUmi += filtroNaN.umi_NaN(bme.readHumidity(), t.pt_U);
     somaTemp += filtroNaN.temp_NaN(bme.readTemperature(), t.pt_T);
     somaPress += filtroNaN.press_NaN((bme.readPressure() / 100.0F), t.pt_P);
@@ -76,24 +77,14 @@ void run() {
 
     tempoCorrente0 = millis();
   }
-  
-  if ((millis() - tempoCorrente1) < tempoIn) {
-
-    Serial.print("u ");
-    Serial.println(mediaUmi, DEC);
-    Serial.print("p ");
-    Serial.println(mediaPress, DEC);
-    Serial.print("1 ");
-    Serial.println(mediaTemp, DEC);
-    Serial.print("2 ");
-    Serial.println(media10k, DEC);
-  }
-  if ((millis() - tempoCorrente1) > tempoOut) {
-
-    tempoCorrente1 = millis();
-  }
 }
 
 void loop() {
-  run();
+  hardWorker();
+  emissorDados(
+    bytesRecebidos,
+    mediaUmi,
+    mediaPress, 
+    mediaTemp, 
+    media10k);
 }
