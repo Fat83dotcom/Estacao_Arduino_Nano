@@ -15,10 +15,10 @@ FiltraNaN filtroNaN;
 const int led = 13;
 const int sensorK10 = 0;
 int bytesRecebidos;
-double mediaUmi = filtroNaN.umi_NaN(bme.readHumidity(), t.pt_U);
-double mediaPress = filtroNaN.press_NaN((bme.readPressure() / 100.0F), t.pt_P);
-double mediaTemp = filtroNaN.temp_NaN(bme.readTemperature(), t.pt_T);
-double media10k = filtroNaN.t10k_NaN(getTemp(sensorK10), t.pt_10);
+double mediaUmi;
+double mediaPress; 
+double mediaTemp; 
+double media10k;
 
 void setup() {
   pinMode(led, OUTPUT);
