@@ -16,9 +16,31 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, Oled_RESET);
 
 class Temporarios;
 class FiltraNaN;
+
+typedef struct{
+  int contador;
+  double divisor;
+}OperadorMedia;
+
+typedef struct{
+  unsigned long dia;
+  unsigned long hora;
+  unsigned long minuto;
+  unsigned long segundo;
+}Temporizador;
+
+typedef struct{
+  double umidade;
+  double pressao;
+  double tempInterna;
+  double tempExterna;
+}DadosSensores;
+
 double getTemp(int sensor);
-void visor(int mediaUmi, int mediaPress, int mediaTemp,
-           int media10k, int dias, int hora, int minuto, int cont);
+
+void emissorDados(int bytesRecebidos, DadosSensores dadosMedia);
+
+void visor(DadosSensores dadosMedia, Temporizador dadosTempo, OperadorMedia contador);
 
 class Temporarios {
   private:
@@ -116,34 +138,30 @@ double getTemp(int sensor) {
 
 void emissorDados(
   int bytesRecebidos,
-  double mediaUmi,
-  double mediaPress,
-  double mediaTemp,
-  double media10k){
+  DadosSensores dadosMedia){
   if (Serial.available()){
     bytesRecebidos = Serial.read();
   
     if (bytesRecebidos == 'u'){
       Serial.print("u ");
-      Serial.println(mediaUmi, 2);
+      Serial.println(dadosMedia.umidade, 2);
     }
     if (bytesRecebidos == 'p'){
       Serial.print("p ");
-      Serial.println(mediaPress, 2);
+      Serial.println(dadosMedia.pressao, 2);
     }
     if (bytesRecebidos == '1'){
       Serial.print("1 ");
-      Serial.println(mediaTemp, 2);
+      Serial.println(dadosMedia.tempInterna, 2);
     }
     if (bytesRecebidos == '2'){
       Serial.print("2 ");
-      Serial.println(media10k, 2);
+      Serial.println(dadosMedia.tempExterna, 2);
     }
   }
 }
 
-void visor(double mediaUmi, double mediaPress, double mediaTemp,
-           double media10k, int dias, int hora, int minuto, int cont) {
+void visor(DadosSensores dadosMedia, Temporizador dadosTempo, OperadorMedia contador) {
   display.invertDisplay(0);
   display.setTextSize(1);
   display.setTextColor(WHITE);
@@ -153,38 +171,38 @@ void visor(double mediaUmi, double mediaPress, double mediaTemp,
 
   display.setCursor(1, 17);
   display.print("U:");
-  display.print(mediaUmi);
+  display.print(dadosMedia.umidade);
   display.println("%");
  
   display.setCursor(1, 27);
   display.print("P:");
-  display.print(mediaPress);
+  display.print(dadosMedia.pressao);
   display.println("hPa");
   
   display.setCursor(1, 37);
   display.print("T.Int:");
-  display.print(mediaTemp);
+  display.print(dadosMedia.tempInterna);
   display.println("C");
   
   display.setCursor(1, 47);
   display.print("T.Ext:");
-  display.print(media10k);
+  display.print(dadosMedia.tempExterna);
   display.println("C");
   
   display.setCursor(1, 57);
   display.print("D:");
-  display.print(dias);
+  display.print(dadosTempo.dia);
   display.print(",H:");
-  display.print(hora);
+  display.print(dadosTempo.hora);
   display.print(",M:");
-  display.println(minuto);
+  display.println(dadosTempo.minuto);
   
   display.setCursor(78, 17);
   display.print("Contador");
   display.setCursor(84, 27);
   display.print("Media");
   display.setCursor(92, 37);
-  display.print(cont);
+  display.print(contador.contador);
 
   display.display();
   display.clearDisplay();

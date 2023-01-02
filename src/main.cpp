@@ -11,14 +11,17 @@
 Adafruit_BME280 bme;
 Temporarios t;
 FiltraNaN filtroNaN;
+DadosSensores media;
+
+void visor(DadosSensores dadosMedia, Temporizador dadosTempo, OperadorMedia contador);
+
+double getTemp(int sensor);
+
+void emissorDados(int bytesRecebidos, DadosSensores dadosMedia);
 
 const int led = 13;
 const int sensorK10 = 0;
 int bytesRecebidos;
-double mediaUmi;
-double mediaPress; 
-double mediaTemp; 
-double media10k;
 
 void setup() {
   pinMode(led, OUTPUT);
@@ -30,47 +33,39 @@ void setup() {
   delay(10);
 }
 
-double getTemp(int sensor);
-void emissorDados(
-  int bytesRecebidos,
-  double mediaUmi, 
-  double mediaPess, 
-  double mediaTemp, 
-  double media10k
-);
-
 void hardWorker() {
   static unsigned long tempoCorrente = millis();
-  static double soma10k, somaUmi, somaTemp, somaPress;
-  static int contadorMedia = 0;
-  static int minuto, hora, dias;
-  const int divisor = 20;
-  minuto = hora = dias = 0;
-  minuto = millis() / 60000;
-  hora = minuto / 60;
-  dias = hora / 24;
+  static DadosSensores soma;
+  static Temporizador tempo;
+  static OperadorMedia operacaoMedia;
+  operacaoMedia.contador = 0;
+  operacaoMedia.divisor = 20;
+  tempo.minuto = tempo.hora = tempo.dia = 0;
+  tempo.minuto = millis() / 60000;
+  tempo.hora = tempo.minuto / 60;
+  tempo.dia = tempo.hora / 24;
   
-  if (contadorMedia < divisor) {
-    somaUmi += filtroNaN.umi_NaN(bme.readHumidity(), t.pt_U);
-    somaPress += filtroNaN.press_NaN((bme.readPressure() / 100.0F), t.pt_P);
-    somaTemp += filtroNaN.temp_NaN(bme.readTemperature(), t.pt_T);
-    soma10k += filtroNaN.t10k_NaN(getTemp(sensorK10), t.pt_10);
-    contadorMedia++;
+  if (operacaoMedia.contador < operacaoMedia.divisor) {
+    soma.umidade += filtroNaN.umi_NaN(bme.readHumidity(), t.pt_U);
+    soma.pressao += filtroNaN.press_NaN((bme.readPressure() / 100.0F), t.pt_P);
+    soma.tempInterna += filtroNaN.temp_NaN(bme.readTemperature(), t.pt_T);
+    soma.tempExterna += filtroNaN.t10k_NaN(getTemp(sensorK10), t.pt_10);
+    operacaoMedia.contador++;
     digitalWrite(led, 0);
   }
   else {
     
-    mediaUmi = somaUmi / divisor;
-    mediaPress = somaPress / divisor;
-    mediaTemp = somaTemp / divisor;
-    media10k = soma10k / divisor;
-    contadorMedia = 0;
-    somaUmi = somaTemp = somaPress = soma10k = 0;
+    media.umidade = soma.umidade / operacaoMedia.divisor;
+    media.pressao = soma.pressao / operacaoMedia.divisor;
+    media.tempInterna = soma.tempInterna / operacaoMedia.divisor;
+    media.tempExterna = soma.tempExterna / operacaoMedia.divisor;
+    operacaoMedia.contador = 0;
+    soma.umidade = soma.pressao = soma.tempInterna = soma.tempExterna = 0;
     digitalWrite(led, 1);
   }
 
   if ((millis() - tempoCorrente) < 999) {
-    visor(mediaUmi, mediaPress, mediaTemp, media10k, dias, hora, minuto, contadorMedia);
+    visor(media, tempo, operacaoMedia);
   }
   
   if ((millis() - tempoCorrente) > 1000) {
@@ -81,10 +76,5 @@ void hardWorker() {
 
 void loop() {
   hardWorker();
-  emissorDados(
-    bytesRecebidos,
-    mediaUmi,
-    mediaPress, 
-    mediaTemp, 
-    media10k);
+  emissorDados(bytesRecebidos, media);
 }
