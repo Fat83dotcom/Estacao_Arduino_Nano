@@ -58,68 +58,63 @@ class Temporarios {
 
 class FiltraNaN {
   private:
-  double _Umi;
-  double _Temp;
+  double _Umidade;
+  double _TempInterna;
   double _Press;
-  double _10k;
-  int cont;
+  double _TempExterna;
+  int contador;
+  int numeroDeVoltas = 1000;
 
   public:
   double umi_NaN (double umidade, double *pUmidade) {
-    _Umi = umidade;
-    if (!isnan(_Umi)) {
-      *pUmidade = _Umi;
+    _Umidade = umidade;
+    if (!isnan(_Umidade)) {
+      *pUmidade = _Umidade;
     }
-    cont = 0;
-    while (isnan(_Umi) && cont < 1000){
-      _Umi = umidade;
-      cont ++;
+    contador = 0;
+    while (isnan(_Umidade) && contador < numeroDeVoltas){
+      _Umidade = umidade;
+      contador ++;
     }
-    return (cont == 1000) ? *pUmidade : _Umi;
-    
+    return (contador == numeroDeVoltas) ? *pUmidade : _Umidade;
   }
 
-  double temp_NaN (double temperatura_1, double *ptemperatura_1) {
-    _Temp = temperatura_1;
-    if (!isnan(_Temp)) {
-      *ptemperatura_1 = _Temp;
+  double temp_NaN (double tempInterna, double *pTempInterna) {
+    _TempInterna = tempInterna;
+    if (!isnan(_TempInterna)) {
+      *pTempInterna = _TempInterna;
     }
-    cont = 0;
-    while (isnan(_Temp) && cont < 1000) {
-      _Temp = temperatura_1;
-      cont++;
+    contador = 0;
+    while (isnan(_TempInterna) && contador < numeroDeVoltas) {
+      _TempInterna = tempInterna;
+      contador++;
     }
-    return (cont == 1000) ? *ptemperatura_1 : _Temp;
-    
+    return (contador == numeroDeVoltas) ? *pTempInterna : _TempInterna; 
   }
-
   double press_NaN (double press, double *pPressao) {
     _Press = press;
     if (!isnan(_Press)) {
       *pPressao = _Press;
     }
-    
-    cont = 0;
-    while (isnan(_Press) && cont < 1000) {
+    contador = 0;
+    while (isnan(_Press) && contador < numeroDeVoltas) {
       _Press = press;
-      cont++;
+      contador++;
     }
-    return (cont == 1000) ? *pPressao : _Press;
-    
+    return (contador == numeroDeVoltas) ? *pPressao : _Press;
   }
 
-  double t10k_NaN(double temperatura_10k, double *pTemperatura_2) {
-    _10k = temperatura_10k;
-    if (!isnan(_10k)) {
-      *pTemperatura_2 = _10k;
+  double t10k_NaN(double tempExterna, double *pTempExterna) {
+    _TempExterna = tempExterna;
+    if (!isnan(_TempExterna)) {
+      *pTempExterna = _TempExterna;
     }
-    cont = 0;
-    while (isnan(_10k) && cont < 1000) {
-      _10k = temperatura_10k;
-      cont++;
+    contador = 0;
+    while (isnan(_TempExterna) && contador < numeroDeVoltas) {
+      _TempExterna = tempExterna;
+      contador++;
     }
-    return (cont == 1000) ? *pTemperatura_2 : _10k;
-    
+    return (contador == numeroDeVoltas) ? *pTempExterna : _TempExterna;
   }
 };
 

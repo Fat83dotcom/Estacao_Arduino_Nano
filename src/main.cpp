@@ -31,7 +31,6 @@ void setup() {
   display.begin(SSD1306_SWITCHCAPVCC, 0x3c);
   bme.begin(0x76);
   display.clearDisplay();
-  delay(10);
 }
 
 void hardWorker() {
@@ -53,7 +52,6 @@ void hardWorker() {
     digitalWrite(led, 0);
   }
   else {
-    
     media.umidade = soma.umidade / operacaoMedia.divisor;
     media.pressao = soma.pressao / operacaoMedia.divisor;
     media.tempInterna = soma.tempInterna / operacaoMedia.divisor;
