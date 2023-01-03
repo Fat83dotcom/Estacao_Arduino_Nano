@@ -14,9 +14,6 @@
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, Oled_RESET);
 
-class Temporarios;
-class FiltraNaN;
-
 typedef struct{
   int contador = 0;
   double divisor;
@@ -41,7 +38,7 @@ void emissorDados(int bytesRecebidos, DadosSensores dadosMedia);
 
 void visor(DadosSensores dadosMedia, Temporizador dadosTempo, OperadorMedia contador);
 
-class Temporarios {
+typedef struct {
   private:
   double t_Umi;
   double t_Temp;
@@ -54,9 +51,9 @@ class Temporarios {
   double *pt_P = &t_Temp;
   double *pt_10 = &t_10k;
 
-};
+}DadosTemporarios;
 
-class FiltraNaN {
+typedef struct {
   private:
   double _Umidade;
   double _TempInterna;
@@ -116,7 +113,7 @@ class FiltraNaN {
     }
     return (contador == numeroDeVoltas) ? *pTempExterna : _TempExterna;
   }
-};
+}FiltraNaN;
 
 double getTemp(int sensor) {
   

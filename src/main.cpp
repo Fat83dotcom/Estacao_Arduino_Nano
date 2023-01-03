@@ -9,7 +9,7 @@
 #include "myClassAndFunctions.h"
 
 Adafruit_BME280 bme;
-Temporarios t;
+DadosTemporarios t;
 FiltraNaN filtroNaN;
 DadosSensores media;
 OperadorMedia operacaoMedia;
