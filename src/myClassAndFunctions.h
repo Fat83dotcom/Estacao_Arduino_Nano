@@ -18,7 +18,7 @@ class Temporarios;
 class FiltraNaN;
 
 typedef struct{
-  int contador;
+  int contador = 0;
   double divisor;
 }OperadorMedia;
 
@@ -26,7 +26,6 @@ typedef struct{
   unsigned long dia;
   unsigned long hora;
   unsigned long minuto;
-  unsigned long segundo;
 }Temporizador;
 
 typedef struct{
@@ -136,9 +135,7 @@ double getTemp(int sensor) {
   return Temp;  
 }
 
-void emissorDados(
-  int bytesRecebidos,
-  DadosSensores dadosMedia){
+void emissorDados(int bytesRecebidos, DadosSensores dadosMedia) {
   if (Serial.available()){
     bytesRecebidos = Serial.read();
   

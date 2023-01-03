@@ -12,6 +12,7 @@ Adafruit_BME280 bme;
 Temporarios t;
 FiltraNaN filtroNaN;
 DadosSensores media;
+OperadorMedia operacaoMedia;
 
 void visor(DadosSensores dadosMedia, Temporizador dadosTempo, OperadorMedia contador);
 
@@ -37,13 +38,11 @@ void hardWorker() {
   static unsigned long tempoCorrente = millis();
   static DadosSensores soma;
   static Temporizador tempo;
-  static OperadorMedia operacaoMedia;
-  operacaoMedia.contador = 0;
-  operacaoMedia.divisor = 20;
   tempo.minuto = tempo.hora = tempo.dia = 0;
   tempo.minuto = millis() / 60000;
   tempo.hora = tempo.minuto / 60;
   tempo.dia = tempo.hora / 24;
+  operacaoMedia.divisor = 20;
   
   if (operacaoMedia.contador < operacaoMedia.divisor) {
     soma.umidade += filtroNaN.umi_NaN(bme.readHumidity(), t.pt_U);
