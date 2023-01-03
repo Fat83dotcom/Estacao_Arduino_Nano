@@ -1,5 +1,5 @@
-#ifndef CLASSESFILTRO_H
-#define CLASSEFILTRO_H
+#ifndef BIBLIOTECA_PADRAO_ESTACAO
+#define BIBLIOTECA_PADRAO_ESTACAO
 
 #include <Arduino.h>
 #include <math.h>
@@ -16,10 +16,13 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, Oled_RESET);
 
 typedef struct{
   int contador = 0;
-  double divisor;
+  const double divisor = 20;
 }OperadorMedia;
 
 typedef struct{
+  const unsigned long _60MIL_MILISEGUNDOS = 60000;
+  const unsigned long _60_MINUTOS = 60;
+  const unsigned long _24_HORAS = 24;
   unsigned long dia;
   unsigned long hora;
   unsigned long minuto;
@@ -34,7 +37,7 @@ typedef struct{
 
 double getTemp(int sensor);
 
-void emissorDados(int bytesRecebidos, DadosSensores dadosMedia);
+void servidorDados(int bytesRecebidos, DadosSensores dadosMedia);
 
 void visor(DadosSensores dadosMedia, Temporizador dadosTempo, OperadorMedia contador);
 
@@ -127,7 +130,7 @@ double getTemp(int sensor) {
   return Temp;  
 }
 
-void emissorDados(int bytesRecebidos, DadosSensores dadosMedia) {
+void servidorDados(int bytesRecebidos, DadosSensores dadosMedia) {
   if (Serial.available()){
     bytesRecebidos = Serial.read();
   
@@ -196,5 +199,4 @@ void visor(DadosSensores dadosMedia, Temporizador dadosTempo, OperadorMedia cont
   display.display();
   display.clearDisplay();
 }
-
 #endif

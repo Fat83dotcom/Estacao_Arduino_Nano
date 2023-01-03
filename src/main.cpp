@@ -18,7 +18,7 @@ void visor(DadosSensores dadosMedia, Temporizador dadosTempo, OperadorMedia cont
 
 double getTemp(int sensor);
 
-void emissorDados(int bytesRecebidos, DadosSensores dadosMedia);
+void servidorDados(int bytesRecebidos, DadosSensores dadosMedia);
 
 const int led = 13;
 const int sensorK10 = 0;
@@ -38,10 +38,9 @@ void hardWorker() {
   static DadosSensores soma;
   static Temporizador tempo;
   tempo.minuto = tempo.hora = tempo.dia = 0;
-  tempo.minuto = millis() / 60000;
-  tempo.hora = tempo.minuto / 60;
-  tempo.dia = tempo.hora / 24;
-  operacaoMedia.divisor = 20;
+  tempo.minuto = millis() / tempo._60MIL_MILISEGUNDOS;
+  tempo.hora = tempo.minuto / tempo._60_MINUTOS;
+  tempo.dia = tempo.hora / tempo._24_HORAS;
   
   if (operacaoMedia.contador < operacaoMedia.divisor) {
     soma.umidade += filtroNaN.umi_NaN(bme.readHumidity(), t.pt_U);
@@ -64,14 +63,12 @@ void hardWorker() {
   if ((millis() - tempoCorrente) < 999) {
     visor(media, tempo, operacaoMedia);
   }
-  
   if ((millis() - tempoCorrente) > 1000) {
-
     tempoCorrente = millis();
   }
 }
 
 void loop() {
   hardWorker();
-  emissorDados(bytesRecebidos, media);
+  servidorDados(bytesRecebidos, media);
 }
