@@ -37,9 +37,9 @@ typedef struct{
 
 double getTemp(int sensor);
 
-void servidorDados(int bytesRecebidos, DadosSensores dadosMedia);
+void servidorDados(int bytesRecebidos, DadosSensores *dadosMedia);
 
-void visor(DadosSensores dadosMedia, Temporizador dadosTempo, OperadorMedia contador);
+void visor(DadosSensores *dadosMedia, Temporizador *dadosTempo, OperadorMedia *contador);
 
 typedef struct {
   private:
@@ -130,30 +130,30 @@ double getTemp(int sensor) {
   return Temp;  
 }
 
-void servidorDados(int bytesRecebidos, DadosSensores dadosMedia) {
+void servidorDados(int bytesRecebidos, DadosSensores *dadosMedia) {
   if (Serial.available()){
     bytesRecebidos = Serial.read();
   
     if (bytesRecebidos == 'u'){
       Serial.print("u ");
-      Serial.println(dadosMedia.umidade, 2);
+      Serial.println(dadosMedia->umidade, 2);
     }
     if (bytesRecebidos == 'p'){
       Serial.print("p ");
-      Serial.println(dadosMedia.pressao, 2);
+      Serial.println(dadosMedia->pressao, 2);
     }
     if (bytesRecebidos == '1'){
       Serial.print("1 ");
-      Serial.println(dadosMedia.tempInterna, 2);
+      Serial.println(dadosMedia->tempInterna, 2);
     }
     if (bytesRecebidos == '2'){
       Serial.print("2 ");
-      Serial.println(dadosMedia.tempExterna, 2);
+      Serial.println(dadosMedia->tempExterna, 2);
     }
   }
 }
 
-void visor(DadosSensores dadosMedia, Temporizador dadosTempo, OperadorMedia contador) {
+void visor(DadosSensores *dadosMedia, Temporizador *dadosTempo, OperadorMedia *contador) {
   display.invertDisplay(0);
   display.setTextSize(1);
   display.setTextColor(WHITE);
@@ -163,38 +163,38 @@ void visor(DadosSensores dadosMedia, Temporizador dadosTempo, OperadorMedia cont
 
   display.setCursor(1, 17);
   display.print("U:");
-  display.print(dadosMedia.umidade);
+  display.print(dadosMedia->umidade);
   display.println("%");
  
   display.setCursor(1, 27);
   display.print("P:");
-  display.print(dadosMedia.pressao);
+  display.print(dadosMedia->pressao);
   display.println("hPa");
   
   display.setCursor(1, 37);
   display.print("T.Int:");
-  display.print(dadosMedia.tempInterna);
+  display.print(dadosMedia->tempInterna);
   display.println("C");
   
   display.setCursor(1, 47);
   display.print("T.Ext:");
-  display.print(dadosMedia.tempExterna);
+  display.print(dadosMedia->tempExterna);
   display.println("C");
   
   display.setCursor(1, 57);
   display.print("D:");
-  display.print(dadosTempo.dia);
+  display.print(dadosTempo->dia);
   display.print(",H:");
-  display.print(dadosTempo.hora);
+  display.print(dadosTempo->hora);
   display.print(",M:");
-  display.println(dadosTempo.minuto);
+  display.println(dadosTempo->minuto);
   
   display.setCursor(78, 17);
   display.print("Contador");
   display.setCursor(84, 27);
   display.print("Media");
   display.setCursor(92, 37);
-  display.print(contador.contador);
+  display.print(contador->contador);
 
   display.display();
   display.clearDisplay();

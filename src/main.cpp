@@ -13,6 +13,8 @@ DadosTemporarios t;
 FiltraNaN filtroNaN;
 DadosSensores media;
 OperadorMedia operacaoMedia;
+DadosSensores *pMedia = &media;
+OperadorMedia *pOperacaoMedia = &operacaoMedia;
 
 void visor(DadosSensores dadosMedia, Temporizador dadosTempo, OperadorMedia contador);
 
@@ -37,6 +39,7 @@ void hardWorker() {
   static unsigned long tempoCorrente = millis();
   static DadosSensores soma;
   static Temporizador tempo;
+  Temporizador *pTempo = &tempo;
   tempo.minuto = tempo.hora = tempo.dia = 0;
   tempo.minuto = millis() / tempo._60MIL_MILISEGUNDOS;
   tempo.hora = tempo.minuto / tempo._60_MINUTOS;
@@ -61,7 +64,7 @@ void hardWorker() {
   }
 
   if ((millis() - tempoCorrente) < 999) {
-    visor(media, tempo, operacaoMedia);
+    visor(pMedia, pTempo, pOperacaoMedia);
   }
   if ((millis() - tempoCorrente) > 1000) {
     tempoCorrente = millis();
@@ -70,5 +73,5 @@ void hardWorker() {
 
 void loop() {
   hardWorker();
-  servidorDados(bytesRecebidos, media);
+  servidorDados(bytesRecebidos, pMedia);
 }
