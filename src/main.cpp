@@ -40,7 +40,6 @@ void hardWorker() {
   static DadosSensores soma;
   static Temporizador tempo;
   Temporizador *pTempo = &tempo;
-  tempo.minuto = tempo.hora = tempo.dia = 0;
   tempo.minuto = millis() / tempo._60MIL_MILISEGUNDOS;
   tempo.hora = tempo.minuto / tempo._60_MINUTOS;
   tempo.dia = tempo.hora / tempo._24_HORAS;

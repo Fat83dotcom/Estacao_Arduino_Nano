@@ -37,9 +37,9 @@ class Temporizador{
   const unsigned long _60MIL_MILISEGUNDOS = 60000;
   const unsigned long _60_MINUTOS = 60;
   const unsigned long _24_HORAS = 24;
-  unsigned long dia;
-  unsigned long hora;
-  unsigned long minuto;
+  unsigned long dia = 0;
+  unsigned long hora = 0;
+  unsigned long minuto = 0;
 };
 
 class DadosSensores{
