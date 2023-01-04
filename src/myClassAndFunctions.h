@@ -14,34 +14,43 @@
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, Oled_RESET);
 
-typedef struct{
+class OperadorMedia;
+class Temporizador;
+class DadosSensores;
+class DadosTemporarios;
+class FiltraNaN;
+
+class OperadorMedia{
+  public:
   int contador = 0;
   const double divisor = 20;
-}OperadorMedia;
+  double mediaCalculada;
 
-typedef struct{
+  double calcularMedia(double soma){
+    mediaCalculada = soma / divisor;
+    return mediaCalculada;
+  }
+};
+
+class Temporizador{
+  public:
   const unsigned long _60MIL_MILISEGUNDOS = 60000;
   const unsigned long _60_MINUTOS = 60;
   const unsigned long _24_HORAS = 24;
   unsigned long dia;
   unsigned long hora;
   unsigned long minuto;
-}Temporizador;
+};
 
-typedef struct{
+class DadosSensores{
+  public:
   double umidade;
   double pressao;
   double tempInterna;
   double tempExterna;
-}DadosSensores;
+};
 
-double getTemp(int sensor);
-
-void servidorDados(int bytesRecebidos, DadosSensores *dadosMedia);
-
-void visor(DadosSensores *dadosMedia, Temporizador *dadosTempo, OperadorMedia *contador);
-
-typedef struct {
+class DadosTemporarios{
   private:
   double t_Umi;
   double t_Temp;
@@ -54,9 +63,9 @@ typedef struct {
   double *pt_P = &t_Temp;
   double *pt_10 = &t_10k;
 
-}DadosTemporarios;
+};
 
-typedef struct {
+class FiltraNaN{
   private:
   double _Umidade;
   double _TempInterna;
@@ -116,7 +125,13 @@ typedef struct {
     }
     return (contador == numeroDeVoltas) ? *pTempExterna : _TempExterna;
   }
-}FiltraNaN;
+};
+
+double getTemp(int sensor);
+
+void servidorDados(int bytesRecebidos, DadosSensores *dadosMedia);
+
+void visor(DadosSensores *dadosMedia, Temporizador *dadosTempo, OperadorMedia *contador);
 
 double getTemp(int sensor) {
   

@@ -16,11 +16,11 @@ OperadorMedia operacaoMedia;
 DadosSensores *pMedia = &media;
 OperadorMedia *pOperacaoMedia = &operacaoMedia;
 
-void visor(DadosSensores dadosMedia, Temporizador dadosTempo, OperadorMedia contador);
+void visor(DadosSensores *dadosMedia, Temporizador *dadosTempo, OperadorMedia *contador);
 
 double getTemp(int sensor);
 
-void servidorDados(int bytesRecebidos, DadosSensores dadosMedia);
+void servidorDados(int bytesRecebidos, DadosSensores *dadosMedia);
 
 const int led = 13;
 const int sensorK10 = 0;
@@ -54,10 +54,10 @@ void hardWorker() {
     digitalWrite(led, 0);
   }
   else {
-    media.umidade = soma.umidade / operacaoMedia.divisor;
-    media.pressao = soma.pressao / operacaoMedia.divisor;
-    media.tempInterna = soma.tempInterna / operacaoMedia.divisor;
-    media.tempExterna = soma.tempExterna / operacaoMedia.divisor;
+    media.umidade = operacaoMedia.calcularMedia(soma.umidade);
+    media.pressao = operacaoMedia.calcularMedia(soma.pressao);
+    media.tempInterna = operacaoMedia.calcularMedia(soma.tempInterna);
+    media.tempExterna = operacaoMedia.calcularMedia(soma.tempExterna);
     operacaoMedia.contador = 0;
     soma.umidade = soma.pressao = soma.tempInterna = soma.tempExterna = 0;
     digitalWrite(led, 1);
