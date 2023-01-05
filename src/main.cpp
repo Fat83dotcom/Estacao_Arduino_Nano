@@ -44,6 +44,13 @@ void hardWorker() {
   tempo.hora = tempo.minuto / tempo._60_MINUTOS;
   tempo.dia = tempo.hora / tempo._24_HORAS;
   
+  if ((millis() - tempoCorrente) < 1000) {
+    visor(pMedia, pTempo, pOperacaoMedia);
+  }
+  if ((millis() - tempoCorrente) > 1000) {
+    tempoCorrente = millis();
+  }
+
   if (operacaoMedia.contador < operacaoMedia.divisor) {
     soma.umidade += filtroNaN.umi_NaN(bme.readHumidity(), t.pt_U);
     soma.pressao += filtroNaN.press_NaN((bme.readPressure() / 100.0F), t.pt_P);
@@ -60,13 +67,6 @@ void hardWorker() {
     operacaoMedia.contador = 0;
     soma.umidade = soma.pressao = soma.tempInterna = soma.tempExterna = 0;
     digitalWrite(led, 1);
-  }
-
-  if ((millis() - tempoCorrente) < 999) {
-    visor(pMedia, pTempo, pOperacaoMedia);
-  }
-  if ((millis() - tempoCorrente) > 1000) {
-    tempoCorrente = millis();
   }
 }
 

@@ -168,6 +168,17 @@ void servidorDados(int bytesRecebidos, DadosSensores *dadosMedia) {
   }
 }
 
+void barraProgressoVisor(int contadorCorrente, int totalContador){
+  int qtdPontosBarra = 7;
+  int cursorEixoX = 77;
+  int pontoBarra = contadorCorrente / (totalContador / qtdPontosBarra);
+  for (int i = 0; i < pontoBarra; i++){
+    display.setCursor((cursorEixoX), 47);
+    display.print(">");
+    cursorEixoX += 5;
+  }
+}
+
 void visor(DadosSensores *dadosMedia, Temporizador *dadosTempo, OperadorMedia *contador) {
   display.invertDisplay(0);
   display.setTextSize(1);
@@ -209,8 +220,10 @@ void visor(DadosSensores *dadosMedia, Temporizador *dadosTempo, OperadorMedia *c
   display.setCursor(84, 27);
   display.print("Media");
   display.setCursor(92, 37);
-  display.print(contador->contador);
-
+  if (contador->contador != contador->divisor){
+    display.print(contador->contador + 1);
+  }
+  barraProgressoVisor(contador->contador, contador->divisor);
   display.display();
   display.clearDisplay();
 }
