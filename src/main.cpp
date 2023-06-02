@@ -54,8 +54,8 @@ void hardWorker() {
   if (operacaoMedia.contador < operacaoMedia.divisor) {
     soma.umidade += 70;
     soma.pressao += 940.66;
-    soma.tempInterna += 24;
-    soma.tempExterna += 30;
+    soma.tempInterna += 204;
+    soma.tempExterna += 70;
     operacaoMedia.contador++;
     digitalWrite(led, 0);
   }
