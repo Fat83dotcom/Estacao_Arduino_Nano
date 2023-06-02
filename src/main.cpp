@@ -35,6 +35,7 @@ void setup() {
   display.begin(SSD1306_SWITCHCAPVCC, 0x3c);
   bme.begin(0x76);
   display.clearDisplay();
+  srand (time(NULL));
 }
 
 void hardWorker() {
