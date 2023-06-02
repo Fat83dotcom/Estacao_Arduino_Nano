@@ -52,10 +52,10 @@ void hardWorker() {
   }
 
   if (operacaoMedia.contador < operacaoMedia.divisor) {
-    soma.umidade += filtroNaN.umi_NaN(bme.readHumidity(), t.pt_U);
-    soma.pressao += filtroNaN.press_NaN((bme.readPressure() / 100.0F), t.pt_P);
-    soma.tempInterna += filtroNaN.temp_NaN(bme.readTemperature(), t.pt_T);
-    soma.tempExterna += filtroNaN.t10k_NaN(getTemp(sensorK10), t.pt_10);
+    soma.umidade += 70;
+    soma.pressao += 940.66;
+    soma.tempInterna += 24;
+    soma.tempExterna += 30;
     operacaoMedia.contador++;
     digitalWrite(led, 0);
   }
