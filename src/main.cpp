@@ -22,6 +22,8 @@ double getTemp(int sensor);
 
 void servidorDados(int bytesRecebidos, DadosSensores *dadosMedia);
 
+int geradorAleatorio(int tipo);
+
 const int led = 13;
 const int sensorK10 = 0;
 int bytesRecebidos;
@@ -52,10 +54,10 @@ void hardWorker() {
   }
 
   if (operacaoMedia.contador < operacaoMedia.divisor) {
-    soma.umidade += 70;
-    soma.pressao += 940.66;
-    soma.tempInterna += 204;
-    soma.tempExterna += 70;
+    soma.umidade += geradorAleatorio(3);
+    soma.pressao += geradorAleatorio(2);
+    soma.tempInterna += geradorAleatorio(0);
+    soma.tempExterna += geradorAleatorio(1);
     operacaoMedia.contador++;
     digitalWrite(led, 0);
   }
