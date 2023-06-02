@@ -7,6 +7,8 @@
 #include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
+#include <stdlib.h>
+#include <time.h>
 
 #define SCREEN_WIDTH 128 // Oled display width(largura), in pixels
 #define SCREEN_HEIGHT 64 // Oled display height(altura), in pixels
@@ -127,11 +129,29 @@ class FiltraNaN{
   }
 };
 
+int geradorAleatorio(int tipo);
+
 double getTemp(int sensor);
 
 void servidorDados(int bytesRecebidos, DadosSensores *dadosMedia);
 
 void visor(DadosSensores *dadosMedia, Temporizador *dadosTempo, OperadorMedia *contador);
+
+int geradorAleatorio(int tipo) {
+  if (tipo == 0) {
+    return rand() % 100;
+  }
+  if (tipo == 1) {
+    return rand() % 100;
+  }
+  if (tipo == 2) {
+    return rand() % 200 + 900; 
+  }
+  if (tipo == 3) {
+    return rand() % 100 + 1;
+  }
+  return -1;
+}
 
 double getTemp(int sensor) {
   
