@@ -23,7 +23,7 @@ double getTemp(int sensor);
 void servidorDados(int bytesRecebidos, DadosSensores *dadosMedia);
 
 const int led = 13;
-const int sensorK10 = 0;
+const int sensorK10 = 1;
 int bytesRecebidos;
 
 void setup() {
